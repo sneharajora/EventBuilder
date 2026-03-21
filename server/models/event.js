@@ -14,7 +14,7 @@ const eventSchema =  new mongoose.Schema( {
        
      },
      date:{
-        type:Number,
+        type:String
         
      },
      venue:{
@@ -40,6 +40,10 @@ const eventSchema =  new mongoose.Schema( {
      },
      bookedSeats:{
         type:Number,
-        default:100
+        default:0
      },
-     cachedAt:{type:Date,defualt:Date.now}}, {timestamps:true})
+     cachedAt:{type:Date,default:Date.now}}, {timestamps:true});
+
+     const Event = mongoose.model('Event',eventSchema);
+
+     module.exports = Event
