@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const axios = require('axios');
 const Event = require('../models/event');
 
 const mapevent =(event)=>({
@@ -27,11 +27,25 @@ async function findandfetch(){
          });
          console.log(events);
 
+        if(events.length > 0){
+           return events;
+        }
+        else{
+            const response = await axios.get("https://app.ticketmaster.com/discovery/v2/events.json",{
+                params:{
+                    apikey:process.env.TICKETMASTER_API_KEY,
+                    size:20
+                }
+            });
+            const rawdata =  response.data._embedded?.events || [] ;
+             const mappedEvents = rawdata.map(event =>mapevent(event))
+             await Event.insertMany(mappedEvents,{ordered:false})
 
-
-         
+             return mappedEvents;
+        }
+ 
     } catch (error) {
-        console.error('Error fetching events:',err);
+        console.error('Error fetching events:',error);
         
     }
 }  
