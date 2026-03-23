@@ -49,3 +49,15 @@ async function findandfetch(){
         
     }
 }  
+
+
+
+const getEvents = async (req,res) =>{
+   try {
+    const allevents =  await findandfetch();
+     res.status(200).json(allevents);
+   } catch (error) {
+     res.status(500).json({message: "Server error"})
+   }
+}
+
